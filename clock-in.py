@@ -25,6 +25,8 @@ class ClockIn(object):
     LOGIN_URL = "https://zjuam.zju.edu.cn/cas/login?service=https%3A%2F%2Fhealthreport.zju.edu.cn%2Fa_zju%2Fapi%2Fsso%2Findex%3Fredirect%3Dhttps%253A%252F%252Fhealthreport.zju.edu.cn%252Fncov%252Fwap%252Fdefault%252Findex"
     BASE_URL = "https://healthreport.zju.edu.cn/ncov/wap/default/index"
     SAVE_URL = "https://healthreport.zju.edu.cn/ncov/wap/default/save"
+    captcha_url = 'https://healthreport.zju.edu.cn/ncov/wap/default/code'
+
     HEADERS = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
     }
@@ -111,6 +113,12 @@ class ClockIn(object):
         new_info['jcqzrq'] = ""
         new_info['gwszdd'] = ""
         new_info['szgjcs'] = ""
+        
+        res_code = self.sess.get(self.captcha_url, headers=self.HEADERS)
+        ocr = ddddocr.DdddOcr()
+        captcha = ocr.classification(res_code.content)
+        print("captcha {}".format(captcha))
+        new_info['verifyCode'] = captcha
 
         # 2021.08.05 Fix 2
         magics = re.findall(r'"([0-9a-f]{32})":\s*"([^\"]+)"', html)
