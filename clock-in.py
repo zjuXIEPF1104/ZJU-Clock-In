@@ -8,6 +8,7 @@ import re
 import datetime
 import time
 import sys
+import ddddocr
 
 
 class ClockIn(object):
