@@ -1,4 +1,4 @@
-name: ClockIn
+name: 打卡
 
 on:
   workflow_dispatch:
